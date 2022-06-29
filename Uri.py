@@ -3,7 +3,7 @@ Root = "https://leekwars.com/api/"
 # Farmer endpoints  
 Login = "farmer/login-token/Login/Password"
 RegisterTournamentFarmer = "farmer/register-tournament"
-RegisterGardenFarmer "farmer/set-in-garden/in_garden"
+RegisterGardenFarmer = "farmer/set-in-garden/in_garden"
 SetAvatar = "farmer/set-avatar"
 
 # AI endpoints
@@ -23,10 +23,11 @@ GetFullMoon = "fight/fullmoon"
 
 # Leek
 RegisterTournamentLeek = "leek/register-tournament/leek_id"
-RegisterGardenLeek "leek/set-in-garden/leek_id/in_garden"
+RegisterGardenLeek = "leek/set-in-garden/leek_id/in_garden"
 RegisterBRLeek = "leek/register-auto-br/leek_id"
 
 # Various
 GetScheme = "scheme/get-all"
 GetServices = "service/get-all"
 GetFunctions = "function/get-all"
+GetDocFunctions = "function/doc/locale"

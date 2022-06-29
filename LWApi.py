@@ -32,3 +32,6 @@ class LWApi:
     
     def getFullMoon(self):
         return self.__session.get(self.__rootUrl + Uri.GetFullMoon, data={ " token": self.__token}).json()
+
+    def getDocFunctions(self, langue):
+        return self.__session.get(self.__rootUrl + Uri.GetDocFunctions.replace("locale",langue), data={ " token": self.__token}).json()
