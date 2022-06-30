@@ -1,6 +1,6 @@
 Root = "https://leekwars.com/api/"
 
-# Farmer endpoints  
+# Farmer endpoints
 Login = "farmer/login-token/Login/Password"
 RegisterTournamentFarmer = "farmer/register-tournament"
 RegisterGardenFarmer = "farmer/set-in-garden/in_garden"
@@ -18,7 +18,7 @@ StartLeekFight = "garden/start-solo-fight/leek_id/target_id"
 GetTeamOpponents = "garden/get-composition-opponents/composition_id"
 StartTeamFight = "garden/start-team-fight/composition_id/target_id"
 
-# Fight 
+# Fight
 GetFullMoon = "fight/fullmoon"
 
 # Leek
