@@ -2,8 +2,9 @@ import requests
 import Uri
 
 class LWApi:
-    
+
     def __init__(self):
+        '''Constructor of LWApi. Init the session.'''
         self.__rootUrl = Uri.Root
         self.__token = ""
         self.__session = requests.Session()
