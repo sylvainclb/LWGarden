@@ -14,7 +14,7 @@ def GetAllIAs():
     print("GetAllIAs()")
     allAIs = api.getIAs()
 
-    allFolders = { 0 : "./" } 
+    allFolders = { 0 : "./" }
     for folder in  allAIs["folders"]:
         allFolders[folder["id"]] = folder["name"]
         path = os.path.join(config["AIs_folder"],folder["name"])
