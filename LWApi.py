@@ -1,8 +1,5 @@
-import json
-from multiprocessing.dummy import connection
 import requests
 import Uri
-import collections
 
 class LWApi:
     
