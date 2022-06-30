@@ -4,7 +4,7 @@ import Uri
 class LWApi:
 
     def __init__(self):
-        '''Constructor of LWApi. Init the session.'''
+        """Constructor of LWApi. Init the session."""
         self.__rootUrl = Uri.Root
         self.__token = ""
         self.__session = requests.Session()
@@ -21,13 +21,13 @@ class LWApi:
 
     def getScheme(self):
         return self.__session.get(self.__rootUrl + Uri.GetScheme, data={ " token": self.__token}).json()
-    
+
     def getServices(self):
         return self.__session.get(self.__rootUrl + Uri.GetServices, data={ " token": self.__token}).json()
 
     def getFunctions(self):
         return self.__session.get(self.__rootUrl + Uri.GetFunctions, data={ " token": self.__token}).json()
-    
+
     def getFullMoon(self):
         return self.__session.get(self.__rootUrl + Uri.GetFullMoon, data={ " token": self.__token}).json()
 
