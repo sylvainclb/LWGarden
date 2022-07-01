@@ -2,7 +2,7 @@ import requests
 import Uri
 
 class LWApi:
-"""Calss LWApi. It will handle the call against the LeekWars Api."""
+    """Class LWApi. It will handle the call against the LeekWars Api."""
 
     def __init__(self):
         """Constructor of LWApi. Init the session."""

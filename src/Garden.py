@@ -10,8 +10,8 @@ with open("config.json", "r") as configfile:
 api = LWApi()
 api.connect(config["username"], config["password"])
 
-def GetAllIAs():
-    print("GetAllIAs()")
+def GetAllAIs():
+    print("GetAllAIs()")
     allAIs = api.getIAs()
 
     allFolders = { 0 : "./" }
@@ -29,7 +29,7 @@ def GetAllIAs():
             outfile.write(code)
         time.sleep(0.2)
 
-GetAllIAs()
+GetAllAIs()
 # print(api.getScheme())
 # print(api.getServices())
 #functions = api.getFunctions()
