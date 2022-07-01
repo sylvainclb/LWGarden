@@ -1,7 +1,5 @@
 .DS_Store
 /__pycache__
-/.vdcode
 /Data
 /Data/*
 config.json
-/.github
