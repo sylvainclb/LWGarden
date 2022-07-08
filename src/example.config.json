@@ -1,5 +1,10 @@
 {
     "username":"email@domain.com",
     "password":"pwd",
-    "AIs_folder":"../LeekWars-AIs"
+    "AIs_folder":"../LeekWars-AIs",
+    "Figths":{
+        "Farmer":"30",
+        "Solo":"5",
+        "Team":"5"
+    }
 }

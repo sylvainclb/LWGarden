@@ -25,9 +25,15 @@ GetFullMoon = "fight/fullmoon"
 RegisterTournamentLeek = "leek/register-tournament/leek_id"
 RegisterGardenLeek = "leek/set-in-garden/leek_id/in_garden"
 RegisterBRLeek = "leek/register-auto-br/leek_id"
+GetRegisters = "leek/get-registers/leek_id"
+SetRegister = "leek/set-register/leek_id/key/value"
+DeleteRegister = "leek/delete-register/leek_id/key"
 
 # Various
 GetScheme = "scheme/get-all"
 GetServices = "service/get-all"
 GetFunctions = "function/get-all"
 GetDocFunctions = "function/doc/locale"
+
+# Trophy
+GetTrophy = ""
