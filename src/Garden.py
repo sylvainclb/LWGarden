@@ -5,8 +5,12 @@ from LWApi import LWApi
 import os
 import json
 
-def main():
+from Uri import GetFarmerTrophies
 
+def main():
+    """Main function, it constites of a Menu where you can select
+    an action to perform:
+     - Get All AIs"""
     print("▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁")
     print("▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██████▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁")
     print("▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁████▓▓▓▓▓▓████▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁")
@@ -45,7 +49,8 @@ def main():
     menu['1']="Get your AIs." 
     menu['2']="Launch fight"
     menu['3']="Get Register"
-    menu['4']="Exit"
+    menu['4']="Get Farmer's Throphies"
+    menu['5']="Exit"
     while True: 
         options=sorted(menu.keys())
 
@@ -60,11 +65,16 @@ def main():
         elif selection == '3':
             GetRegister(api,config)
         elif selection == '4': 
+            GetFarmerTrophies(api,config)
+            break
+        elif selection == '5': 
             break
         else: 
             print("Unknown Option Selected!")
 
 def GetAllAIs(api, config):
+    """Get all AIs from LeekWars, and save them in a directory location
+    The folder hiearchie will be respected"""
     print("\nGetAllAIs()\n")
     allAIs = api.getIAs()
 
@@ -112,6 +122,13 @@ def GetRegister(api,config):
         else: 
             break
         print("\n")
+
+def GetFarmerTrophies(api,config):
+    selection=input("Please enter farmer id: ") 
+    trophies= api.getFarmerTrop4hies(selection)
+    pyro = next(filter(lambda x: x["name"] == "Explorateur" , trophies["trophies"]))
+    print(pyro)
+    id="58321"
 
 
 # Here goes all the magic

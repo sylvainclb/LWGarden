@@ -1,3 +1,4 @@
+from urllib import response
 import requests
 import Uri
 
@@ -12,8 +13,11 @@ class LWApi:
 
     def connect(self,login,password):
         """Connect to LeekWars Api and retrieve the auth token."""
-        connectionString = Uri.Login.replace("Login",login).replace("Password",password)
-        self.__token = self.__session.get(self.__rootUrl + connectionString).json()["token"]
+        connectionString = Uri.Login
+        
+        response = self.__session.post(self.__rootUrl + connectionString, data={ "login": login, "password": password}).json()
+        print(response)
+        self.__token = response["token"]
 
     def getIAs(self):
         """List all the IAs you have on LeekWars."""
@@ -54,3 +58,12 @@ class LWApi:
     def setRegister(self, leekId, registerKey, registerValue):
         """Set the register {key} with {value} of the given {leek}"""
         return self.__session.post(self.__rootUrl + Uri.SetRegister.replace("leek_id", leekId).replace("key", registerKey).replace("value",registerValue), data={ "token": self.__token}).json()
+    
+    def getFarmerTrophies(self, farmerId):
+        """Get trophies list of the given {farmer}"""
+        return self.__session.get(self.__rootUrl + Uri.GetFarmerTrophies.replace("farmer_id", farmerId,).replace("lang","fr"), data={ "token": self.__token, "farmer_id": farmerId, "lang":"fr"}).json()
+    
+    def getFarmerHistory(self, leekId):
+        """Get the registers of the given {leek}"""
+        return self.__session.get(self.__rootUrl + Uri.GetRegisters.replace("leek_id", leekId), data={ "token": self.__token}).json()
+    

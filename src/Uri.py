@@ -1,7 +1,7 @@
 Root = "https://leekwars.com/api/"
 
 # Farmer endpoints
-Login = "farmer/login-token/Login/Password"
+Login = "farmer/login-token" # /login, password 
 RegisterTournamentFarmer = "farmer/register-tournament"
 RegisterGardenFarmer = "farmer/set-in-garden/in_garden"
 SetAvatar = "farmer/set-avatar"
@@ -36,4 +36,7 @@ GetFunctions = "function/get-all"
 GetDocFunctions = "function/doc/locale"
 
 # Trophy
-GetTrophy = ""
+GetFarmerTrophies = "trophy/get-farmer-trophies/farmer_id/lang"
+
+# History
+GetFarmerHistory = "history/get-farmer-history/farmer_id"
