@@ -1,7 +1,7 @@
 Root = "https://leekwars.com/api/"
 
 # Farmer endpoints
-Login = "farmer/login-token" # /login, password 
+Login = "farmer/login-token" # /login, password
 RegisterTournamentFarmer = "farmer/register-tournament"
 RegisterGardenFarmer = "farmer/set-in-garden/in_garden"
 SetAvatar = "farmer/set-avatar"

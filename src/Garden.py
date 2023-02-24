@@ -1,5 +1,3 @@
-from ctypes import sizeof
-from operator import countOf
 import time
 from LWApi import LWApi
 import os
@@ -45,30 +43,30 @@ def main():
     api.connect(config["username"], config["password"])
 
     menu = {}
-    menu['1']="Get your AIs." 
+    menu['1']="Get your AIs."
     menu['2']="Launch fight"
     menu['3']="Get Register"
     menu['4']="Get Farmer's Throphies"
     menu['5']="Exit"
-    while True: 
+    while True:
         options=sorted(menu.keys())
 
-        for entry in options: 
+        for entry in options:
             print(entry, menu[entry])
 
         selection=input("Please Select:") 
-        if selection =='1': 
+        if selection =='1':
             GetAllAIs(api, config)
-        elif selection == '2': 
+        elif selection == '2':
             print("delete")
         elif selection == '3':
             GetRegister(api,config)
-        elif selection == '4': 
+        elif selection == '4':
             GetFarmerTrophies(api,config)
             break
-        elif selection == '5': 
+        elif selection == '5':
             break
-        else: 
+        else:
             print("Unknown Option Selected!")
 
 def GetAllAIs(api, config):
@@ -105,29 +103,28 @@ def GetRegister(api,config):
         menu[str(i)]= register["key"]
         i+=1
     
-    while True: 
+    while True:
         options=sorted(menu.keys())
         for entry in options: 
             print(entry, menu[entry])
-        selection=input("Please Select: (input any other key to exit)") 
-        if options.__contains__(selection) : 
+        selection=input("Please Select: (input any other key to exit)")
+        if options.__contains__(selection) :
             selectedRegister = next(filter(lambda x: x["key"] == menu[selection] , registers["registers"]))
-            max = sorted(json.loads(selectedRegister["value"]).values(), reverse=True)
-            print(max)
-            somme = sum(max)
-            total = len(max)
+            last = sorted(json.loads(selectedRegister["value"]).values(), reverse=True)
+            print(last)
+            somme = sum(last)
+            total = len(last)
             print(somme/total)
-            print(max[0])
+            print(last[0])
         else: 
             break
         print("\n")
 
 def GetFarmerTrophies(api,config):
-    selection=input("Please enter farmer id: ") 
+    selection=input("Please enter farmer id: ")
     trophies= api.getFarmerTrophies(selection)
     pyro = next(filter(lambda x: x["code"] == "explorator" , trophies["trophies"]))
     print(pyro)
-    id="58321"
 
 
 # Here goes all the magic

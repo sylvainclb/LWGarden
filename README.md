@@ -6,8 +6,9 @@ Python 🐍  console app for managing your garden on LeekWars
 
 ## Features
 * Download of your leek files from [LeeKWars](https://www.leekwars.com)
+* Get Register, to check saved data
 
 ## How-To
-+ Install python 3 on our computer
-+ pip3 install -r requirements.txt
+* Install python 3 on your computer
+* pip3 install -r requirements.txt
 

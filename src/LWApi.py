@@ -1,4 +1,3 @@
-from urllib import response
 import requests
 import Uri
 
@@ -13,11 +12,9 @@ class LWApi:
 
     def connect(self,login,password):
         """Connect to LeekWars Api and retrieve the auth token."""
-        connectionString = Uri.Login
-        
-        response = self.__session.post(self.__rootUrl + connectionString, data={ "login": login, "password": password}).json()
-        print(response)
-        self.__token = response["token"]
+        connectionString = Uri.Login  
+        loginResponse = self.__session.post(self.__rootUrl + connectionString, data={ "login": login, "password": password}).json()
+        self.__token = loginResponse["token"]
 
     def getIAs(self):
         """List all the IAs you have on LeekWars."""
