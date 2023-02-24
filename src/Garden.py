@@ -5,7 +5,6 @@ from LWApi import LWApi
 import os
 import json
 
-from Uri import GetFarmerTrophies
 
 def main():
     """Main function, it constites of a Menu where you can select
@@ -125,8 +124,8 @@ def GetRegister(api,config):
 
 def GetFarmerTrophies(api,config):
     selection=input("Please enter farmer id: ") 
-    trophies= api.getFarmerTrop4hies(selection)
-    pyro = next(filter(lambda x: x["name"] == "Explorateur" , trophies["trophies"]))
+    trophies= api.getFarmerTrophies(selection)
+    pyro = next(filter(lambda x: x["code"] == "explorator" , trophies["trophies"]))
     print(pyro)
     id="58321"
 
