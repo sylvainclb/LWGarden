@@ -3,4 +3,5 @@
 /Data
 /Data/*
 /src/config.json
-/.vscode/
+/.vscode
+/.vscode/*
