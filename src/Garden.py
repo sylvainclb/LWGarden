@@ -54,7 +54,7 @@ def main():
         for entry in options:
             print(entry, menu[entry])
 
-        selection=input("Please Select:") 
+        selection=input("Please Select:")
         if selection =='1':
             GetAllAIs(api, config)
         elif selection == '2':
@@ -102,13 +102,13 @@ def GetRegister(api,config):
     for register in registers["registers"]:
         menu[str(i)]= register["key"]
         i+=1
-    
+
     while True:
         options=sorted(menu.keys())
-        for entry in options: 
+        for entry in options:
             print(entry, menu[entry])
         selection=input("Please Select: (input any other key to exit)")
-        if options.__contains__(selection) :
+        if options.__contains__(selection):
             selectedRegister = next(filter(lambda x: x["key"] == menu[selection] , registers["registers"]))
             last = sorted(json.loads(selectedRegister["value"]).values(), reverse=True)
             print(last)
@@ -116,7 +116,7 @@ def GetRegister(api,config):
             total = len(last)
             print(somme/total)
             print(last[0])
-        else: 
+        else:
             break
         print("\n")
 

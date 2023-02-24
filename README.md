@@ -11,4 +11,3 @@ Python 🐍  console app for managing your garden on LeekWars
 ## How-To
 * Install python 3 on your computer
 * pip3 install -r requirements.txt
-

@@ -12,7 +12,7 @@ class LWApi:
 
     def connect(self,login,password):
         """Connect to LeekWars Api and retrieve the auth token."""
-        connectionString = Uri.Login  
+        connectionString = Uri.Login
         loginResponse = self.__session.post(self.__rootUrl + connectionString, data={ "login": login, "password": password}).json()
         self.__token = loginResponse["token"]
 
@@ -47,7 +47,7 @@ class LWApi:
     def getRegisters(self, leekId):
         """Get the registers of the given {leek}"""
         return self.__session.get(self.__rootUrl + Uri.GetRegisters.replace("leek_id", leekId), data={ "token": self.__token}).json()
-    
+
     def deleteRegister(self, leekId, registerKey):
         """Delete the register {key} of the given {leek}"""
         return self.__session.post(self.__rootUrl + Uri.DeleteRegister.replace("leek_id", leekId).replace("key", registerKey), data={ "token": self.__token}).json()
