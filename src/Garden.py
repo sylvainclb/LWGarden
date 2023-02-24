@@ -3,7 +3,6 @@ from LWApi import LWApi
 import os
 import json
 
-
 def main():
     """Main function, it constites of a Menu where you can select
     an action to perform:
@@ -56,36 +55,36 @@ def main():
 
         selection=input("Please Select:")
         if selection =='1':
-            GetAllAIs(api, config)
+            get_all_ias(api, config)
         elif selection == '2':
             print("delete")
         elif selection == '3':
-            GetRegister(api,config)
+            get_register(api,config)
         elif selection == '4':
-            GetFarmerTrophies(api,config)
+            get_farmer_trophies(api,config)
             break
         elif selection == '5':
             break
         else:
             print("Unknown Option Selected!")
 
-def GetAllAIs(api, config):
-    """Get all AIs from LeekWars, and save them in a directory location
+def get_all_ias(api, config):
+    """Get all IAs from LeekWars, and save them in a directory location
     The folder hiearchie will be respected"""
-    print("\nGetAllAIs()\n")
-    allAIs = api.getIAs()
+    print("\nget_all_ias()\n")
+    all_ias = api.get_ias()
 
-    allFolders = { 0 : "./" }
-    for folder in  allAIs["folders"]:
-        allFolders[folder["id"]] = folder["name"]
+    all_folders = { 0 : "./" }
+    for folder in  all_ias["folders"]:
+        all_folders[folder["id"]] = folder["name"]
         path = os.path.join(config["AIs_folder"],folder["name"])
         if(not(os.path.exists(path))) :
             os.mkdir(path)
 
-    for ai in  allAIs["ais"]:
-        name = ai["name"]
-        folder = os.path.join(config["AIs_folder"],allFolders[ai["folder"]])
-        code = api.getIA(str(ai["id"]))["ai"]["code"]
+    for ia in  all_ias["ais"]:
+        name = ia["name"]
+        folder = os.path.join(config["AIs_folder"],all_folders[ia["folder"]])
+        code = api.get_ia(str(ia["id"]))["ai"]["code"]
         with open(os.path.join(folder,name+".leek"), "w") as outfile:
             outfile.write(code)
         time.sleep(0.2)
@@ -94,9 +93,9 @@ def Fight(api,config):
     print("\nFight()\n")
 
 
-def GetRegister(api,config):
+def get_register(api,config):
     print("\nRegister()\n")
-    registers = api.getRegisters("82210")
+    registers = api.get_registers("82210")
     menu ={}
     i=0
     for register in registers["registers"]:
@@ -109,8 +108,8 @@ def GetRegister(api,config):
             print(entry, menu[entry])
         selection=input("Please Select: (input any other key to exit)")
         if options.__contains__(selection):
-            selectedRegister = next(filter(lambda x: x["key"] == menu[selection] , registers["registers"]))
-            last = sorted(json.loads(selectedRegister["value"]).values(), reverse=True)
+            selected_register = next(filter(lambda x: x["key"] == menu[selection] , registers["registers"]))
+            last = sorted(json.loads(selected_register["value"]).values(), reverse=True)
             print(last)
             somme = sum(last)
             total = len(last)
@@ -120,9 +119,9 @@ def GetRegister(api,config):
             break
         print("\n")
 
-def GetFarmerTrophies(api,config):
+def get_farmer_trophies(api,config):
     selection=input("Please enter farmer id: ")
-    trophies= api.getFarmerTrophies(selection)
+    trophies= api.get_farmer_trophies(selection)
     pyro = next(filter(lambda x: x["code"] == "explorator" , trophies["trophies"]))
     print(pyro)
 

@@ -1,42 +1,42 @@
-Root = "https://leekwars.com/api/"
+root = "https://leekwars.com/api/"
 
 # Farmer endpoints
-Login = "farmer/login-token" # /login, password
-RegisterTournamentFarmer = "farmer/register-tournament"
-RegisterGardenFarmer = "farmer/set-in-garden/in_garden"
-SetAvatar = "farmer/set-avatar"
+login = "farmer/login-token" # /login, password
+register_tournament_farmer = "farmer/register-tournament"
+register_garden_farmer = "farmer/set-in-garden/in_garden"
+set_avatar = "farmer/set-avatar"
 
 # AI endpoints
-GetAIs = "ai/get-farmer-ais"
-GetAI = "ai/get"
+get_ais = "ai/get-farmer-ais"
+get_ai = "ai/get"
 
 # Garden
-GetFarmerOpponents = "garden/get-farmer-opponents"
-StartFarmerFight = "garden/start-farmer-fight/target_id"
-GetLeekOpponents = "garden/get-leek-opponents/leek_id"
-StartLeekFight = "garden/start-solo-fight/leek_id/target_id"
-GetTeamOpponents = "garden/get-composition-opponents/composition_id"
-StartTeamFight = "garden/start-team-fight/composition_id/target_id"
+get_farmer_opponents = "garden/get-farmer-opponents"
+start_farmer_fight = "garden/start-farmer-fight/target_id"
+get_leek_opponents = "garden/get-leek-opponents/leek_id"
+start_leek_fight = "garden/start-solo-fight/leek_id/target_id"
+get_team_opponents = "garden/get-composition-opponents/composition_id"
+start_team_fight = "garden/start-team-fight/composition_id/target_id"
 
 # Fight
-GetFullMoon = "fight/fullmoon"
+get_fullmoon = "fight/fullmoon"
 
 # Leek
-RegisterTournamentLeek = "leek/register-tournament/leek_id"
-RegisterGardenLeek = "leek/set-in-garden/leek_id/in_garden"
-RegisterBRLeek = "leek/register-auto-br/leek_id"
-GetRegisters = "leek/get-registers/leek_id"
-SetRegister = "leek/set-register/leek_id/key/value"
-DeleteRegister = "leek/delete-register/leek_id/key"
+register_tournament_leek = "leek/register-tournament/leek_id"
+register_garden_leek = "leek/set-in-garden/leek_id/in_garden"
+register_battle_royal_leek = "leek/register-auto-br/leek_id"
+get_registers = "leek/get-registers/leek_id"
+set_register = "leek/set-register/leek_id/key/value"
+delete_register = "leek/delete-register/leek_id/key"
 
 # Various
-GetScheme = "scheme/get-all"
-GetServices = "service/get-all"
-GetFunctions = "function/get-all"
-GetDocFunctions = "function/doc/locale"
+get_scheme = "scheme/get-all"
+get_services = "service/get-all"
+get_functions = "function/get-all"
+get_doc_functions = "function/doc/locale"
 
 # Trophy
-GetFarmerTrophies = "trophy/get-farmer-trophies/farmer_id/lang"
+get_farmer_trophies = "trophy/get-farmer-trophies/farmer_id/lang"
 
 # History
-GetFarmerHistory = "history/get-farmer-history/farmer_id"
+get_farmer_history = "history/get-farmer-history/farmer_id"
