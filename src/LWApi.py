@@ -16,13 +16,21 @@ class LWApi:
         login_response = self.__session.post(self.__root_url + connection_string, data={ "login": login, "password": password}).json()
         self.__token = login_response["token"]
 
-    def get_ias(self):
-        """List all the IAs you have on LeekWars."""
+    def get_ais(self):
+        """List all the AIs you have on LeekWars."""
         return self.__session.get(self.__root_url + Uri.get_ais, data={ "token": self.__token}).json()
 
-    def get_ia(self,ai_id):
-        """Get the IA file and its content."""
+    def get_ai(self,ai_id):
+        """Get the AI file and its content."""
         return self.__session.get(self.__root_url + Uri.get_ai + "/" + ai_id, data={ "token": self.__token}).json()
+    
+    def new_ai(self,ai_id):
+        """Create a new AI file"""
+        return self.__session.post(self.__root_url + Uri.new_ai + "/" + ai_id, data={ "token": self.__token}).json()
+    
+    def rename_ai(self,ai_id, ai_name):
+        """Rename an AI file"""
+        return self.__session.post(self.__root_url + Uri.rename_ai , data={ "token": self.__token, ai_id:ai_id, ai_name:ai_name}).json()
 
     def get_scheme(self):
         """Not sure of what it is."""

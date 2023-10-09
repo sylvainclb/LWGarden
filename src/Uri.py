@@ -9,6 +9,11 @@ set_avatar = "farmer/set-avatar"
 # AI endpoints
 get_ais = "ai/get-farmer-ais"
 get_ai = "ai/get"
+new_ai = "ai/new"
+save_ai = "ai/save"
+rename_ai = "ai/rename"
+new_folder_ai = "ai-folder/new"
+rename_folder_ai = "ai-folder/rename"
 
 # Garden
 get_farmer_opponents = "garden/get-farmer-opponents"

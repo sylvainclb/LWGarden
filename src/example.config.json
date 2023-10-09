@@ -1,10 +1,25 @@
 {
-    "username":"email@domain.com",
-    "password":"pwd",
-    "AIs_folder":"../LeekWars-AIs",
-    "Figths":{
-        "Farmer":"30",
-        "Solo":"5",
-        "Team":"5"
-    }
+    "AIs_folder":"../LeekWars-AIs/src/",
+    "accounts":[
+        {
+            "username":"email@domain.com",
+            "password":"pw",
+            "Figths":{
+                "Farmer":"30",
+                "Solo":"5",
+                "Team":"5"
+            },
+            "primary":"true"
+        },
+        {
+            "username":"email@domain.com",
+            "password":"pwd",
+            "Figths":{
+                "Farmer":"30",
+                "Solo":"5",
+                "Team":"5"
+            },
+            "primary":"false"
+        }
+    ]
 }
