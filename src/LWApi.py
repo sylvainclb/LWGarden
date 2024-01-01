@@ -71,3 +71,16 @@ class LWApi:
     def get_farmer_history(self, leek_id):
         """Get the registers of the given {leek}"""
         return self.__session.get(self.__root_url + Uri.get_registers.replace("leek_id", leek_id), data={ "token": self.__token}).json()
+    
+    def new_folder(self, folder_name, parent_folder_id = 0):
+        """Create a new folder in LW"""
+        return self.__session.post(self.__root_url + Uri.new_folder_ai, data={ "token": self.__token, "folder_id": str(parent_folder_id), "name": folder_name} )
+    
+    def new_ai(self, ai_name, folder_id = 0, ls_version = 4):
+        """Create a new ai file in LW"""
+        return self.__session.post(self.__root_url + Uri.new_ai, data={ "token": self.__token, "folder_id": str(folder_id), "name": ai_name, "version": str(ls_version)} )
+ 
+    def save_ai(self, ai_id, ai_code):
+        """Save an ai into LW"""
+        return self.__session.post(self.__root_url + Uri.save_ai, data={ "token": self.__token, "ai_id": str(ai_id), "code": ai_code } )
+ 
