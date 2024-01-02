@@ -66,10 +66,8 @@ def main():
             get_register(api,config)
         elif selection == '4':
             get_farmer_trophies(api, config["AIs_folder"])
-            break
         elif selection == '5':
             push_all_ais(api, secondaries, config["AIs_folder"])
-            break
         elif selection == '6':
             break
         else:
@@ -100,7 +98,7 @@ def get_all_ais(api, root_folder : str):
         code = api.get_ai(str(ai["id"]))["ai"]["code"]
         with open(os.path.join(folder,name+".leek"), "w") as outfile:
             outfile.write(code)
-        time.sleep(0.2)
+        time.sleep(0.2) # we need to wait a little, to not be throttle
 
 def push_all_ais(api, secondaries, root_folder):
     """Push all AIs from local directory onto LeekWars
@@ -162,7 +160,15 @@ def push_all_ais(api, secondaries, root_folder):
                     if resultSave.ok:
                         all_remote_ais["ais"].append(new_ai)
             else:
-                print("Need to check if update is needed for ai " + local_file.name)
+                remote_file = [x for x in all_remote_ais["ais"] if x["name"] == local_file.name]
+                remote_code = api.get_ai(str(remote_file[0]["id"]))["ai"]["code"]
+                remote_hash = hashlib.sha512(remote_code.encode('utf-8')).hexdigest()
+                if remote_hash != local_file.hash:
+                    print("Need to update ai " + local_file.name)
+                    resultSave = api.save_ai(remote_file[0]["id"],local_file.content)
+                    if resultSave.ok:
+                        print("ok")
+                time.sleep(0.2) # we need to wait a little, to not be throttle
                 
         
         for ai in  all_remote_ais["ais"]:
