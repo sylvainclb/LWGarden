@@ -42,7 +42,12 @@ def main():
     accounts = config["accounts"]
     principal= next(p for p in accounts if p["primary"] == 'true')
     secondaries = list(p for p in accounts if p["primary"] == 'false')
-    api.connect(principal["username"], principal["password"])
+    if api.connect(principal["username"], principal["password"]):
+        farmer = api.get_farmer_self()["farmer"]
+        print("\nYou are connected as {farmer_name}\n".format(farmer_name=farmer["login"]))
+    else:
+        print("\nCannot connect to LW account with ID {user_name}\n".format(user_name=principal["username"]))
+        exit()
 
     menu = {}
     menu['1']="Get your AIs."
@@ -95,7 +100,7 @@ def get_all_ais(api, root_folder : str):
     for ai in  all_ais["ais"]:
         name = ai["name"]
         folder = os.path.join(root_folder,all_folders[ai["folder"]])
-        code = api.get_ai(str(ai["id"]))["ai"]["code"]
+        code = api.get_ai(ai["id"])["ai"]["code"]
         with open(os.path.join(folder,name+".leek"), "w") as outfile:
             outfile.write(code)
         time.sleep(0.2) # we need to wait a little, to not be throttle
