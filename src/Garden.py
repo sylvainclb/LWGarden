@@ -6,7 +6,7 @@ from shutil import rmtree
 def main():
     """Main function, it constites of a Menu where you can select
     an action to perform:
-     - Get All AIs"""
+    """
     print("▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁")
     print("▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██████▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁")
     print("▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁████▓▓▓▓▓▓████▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁")
@@ -91,9 +91,9 @@ def get_all_ais(api, root_folder : str):
     os.mkdir(root_folder)
 
     all_folders = { 0 : "./" }
-    for folder in  all_ais["folders"]:
-        all_folders[folder["id"]] = folder["name"]
-        path = os.path.join(root_folder,folder["name"])
+    for folder in all_ais["folders"]:
+        all_folders[folder["id"]] =  os.path.join(all_folders[folder["folder"]],folder["name"])
+        path = os.path.join(root_folder, all_folders[folder["id"]])
         if(not(os.path.exists(path))) :
             os.mkdir(path)
 
@@ -120,6 +120,8 @@ def push_all_ais(api, secondaries, root_folder):
     # Per account, get all remote ias, to do the comparison
     for secondary in secondaries:
         api.connect(secondary["username"], secondary["password"])
+        farmer2 = api.get_farmer_self()["farmer"]
+        print("\nPush to the account {farmer_name}\n".format(farmer_name=farmer2["login"]))
         all_remote_ais = api.get_ais()
 
         # Loop on local folder and create in remote if not exists
@@ -146,7 +148,7 @@ def push_all_ais(api, secondaries, root_folder):
         # if exists, compare hash to see if we need to update the remote file
         for local_file in all_local_files:
             if not any(x["name"] == local_file.name for x in all_remote_ais["ais"]):
-                print("need to create ai: " + local_file.name)
+                print("need to create ai: " + local_file.name, end="")
                 parent_folder_id = 0
                 if local_file.folder != '':
                     parent = [x for x in all_remote_ais["folders"] if x["name"] == local_file.folder]
@@ -164,25 +166,28 @@ def push_all_ais(api, secondaries, root_folder):
                     resultSave = api.save_ai(new_ai["id"],new_ai["code"])
                     if resultSave.ok:
                         all_remote_ais["ais"].append(new_ai)
+                        print(" -> Done!")
             else:
                 remote_file = [x for x in all_remote_ais["ais"] if x["name"] == local_file.name]
                 remote_code = api.get_ai(str(remote_file[0]["id"]))["ai"]["code"]
                 remote_hash = hashlib.sha512(remote_code.encode('utf-8')).hexdigest()
                 if remote_hash != local_file.hash:
-                    print("Need to update ai " + local_file.name)
+                    print("Need to update ai " + local_file.name, end="")
                     resultSave = api.save_ai(remote_file[0]["id"],local_file.content)
                     if resultSave.ok:
-                        print("ok")
+                        print(" -> Done!")
                 time.sleep(0.2) # we need to wait a little, to not be throttle
                 
         
         for ai in  all_remote_ais["ais"]:
             if not any( x.name == ai["name"] for x in all_local_files):
-                print("need to delete ai: " + ai["name"])
+                print("need to delete ai: " + ai["name"], end="")
+                print(" -> TO DO...")
 
         for folder in all_remote_ais["folders"]:
             if not any( x.name == folder["name"] for x in all_local_folders):
-                print("need to delete folder: " + folder["name"])
+                print("need to delete folder: " + folder["name"], end="")
+                print(" -> TO DO...")
 
 
 def Fight(api,config):
@@ -232,7 +237,7 @@ def get_local_ais(root_folder, local_ais = [], ext = "*.leek"):
                     "name": filename.replace('.leek',''), 
                     "content" : filecontent, 
                     "hash": hashlib.sha512(filecontent.encode('utf-8')).hexdigest(),
-                    "folder": dirpath.replace(root_folder,''),
+                    "folder": os.path.basename(dirpath.replace(root_folder,'')),
                     "type": "file"
                 })())
         for dirname in dirnames:
@@ -240,7 +245,7 @@ def get_local_ais(root_folder, local_ais = [], ext = "*.leek"):
                     "name": dirname ,
                     "content" : "", 
                     "hash": "",
-                    "folder": dirpath.replace(root_folder,''),
+                    "folder": os.path.basename(dirpath.replace(root_folder,'')),
                     "type": "folder"
                 })())
     return local_ais
