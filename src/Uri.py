@@ -16,6 +16,8 @@ save_ai = "ai/save"
 rename_ai = "ai/rename"
 new_folder_ai = "ai-folder/new-name"
 rename_folder_ai = "ai-folder/rename"
+delete_ai = "ai/delete"
+delete_folder = "ai-folder/delete"
 
 # Garden
 get_farmer_opponents = "garden/get-farmer-opponents"

@@ -42,13 +42,22 @@ class LWApi:
         """Save an ai into LW"""
         return self.__session.post(self.__root_url + Uri.save_ai, data={ "token": self.__token, "ai_id": str(ai_id), "code": ai_code } )
     
-    def rename_ai(self,ai_id, ai_name):
+    def rename_ai(self, ai_id, ai_name):
         """Rename an AI file"""
-        return self.__session.post(self.__root_url + Uri.rename_ai , data={ "token": self.__token, ai_id:ai_id, ai_name:ai_name}).json()
+        return self.__session.post(self.__root_url + Uri.rename_ai , data={ "token": self.__token, "ai_id": ai_id, "ai_name": ai_name}).json()
     
     def new_folder(self, folder_name, parent_folder_id = 0):
         """Create a new folder in LW"""
         return self.__session.post(self.__root_url + Uri.new_folder_ai, data={ "token": self.__token, "folder_id": str(parent_folder_id), "name": folder_name} )
+
+    def delete_ai(self, ai_id):
+        """Delete an AI file"""
+        return self.__session.delete(self.__root_url + Uri.delete_ai , data={ "token": self.__token, "ai_id": ai_id })
+    
+    def delete_folder(self, folder_id):
+        """Delete a folder in LW"""
+        return self.__session.delete(self.__root_url + Uri.delete_folder, data={ "token": self.__token, "folder_id": str(folder_id) } )
+
 
     def get_scheme(self):
         """Not sure of what it is."""

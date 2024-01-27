@@ -44,7 +44,7 @@ def main():
     secondaries = list(p for p in accounts if p["primary"] == 'false')
     if api.connect(principal["username"], principal["password"]):
         farmer = api.get_farmer_self()["farmer"]
-        print("\nYou are connected as {farmer_name}\n".format(farmer_name=farmer["login"]))
+        print("\nYou are connected as {farmer_name}".format(farmer_name=farmer["login"]))
     else:
         print("\nCannot connect to LW account with ID {user_name}\n".format(user_name=principal["username"]))
         exit()
@@ -58,6 +58,8 @@ def main():
     menu['6']="Exit"
     while True:
         options=sorted(menu.keys())
+
+        print("\n")
 
         for entry in options:
             print(entry, menu[entry])
@@ -73,10 +75,13 @@ def main():
             get_farmer_trophies(api, config["AIs_folder"])
         elif selection == '5':
             push_all_ais(api, secondaries, config["AIs_folder"])
+            # reconnect to the main
+            api.connect(principal["username"], principal["password"])
         elif selection == '6':
             break
         else:
             print("Unknown Option Selected!")
+
 
 def get_all_ais(api, root_folder : str):
     """Get all AIs from LeekWars, and save them in a directory location
@@ -127,7 +132,7 @@ def push_all_ais(api, secondaries, root_folder):
         # Loop on local folder and create in remote if not exists
         for local_folder in all_local_folders:
             if not any(x["name"] == local_folder.name for x in all_remote_ais["folders"]):
-                print("need to create folder: " + local_folder.name)
+                print("\tCreate folder: " + local_folder.name)
                 parent_folder_id = 0
                 if local_folder.folder != '':
                     parent = [x for x in all_remote_ais["folders"] if x["name"] == local_folder.folder]
@@ -148,7 +153,7 @@ def push_all_ais(api, secondaries, root_folder):
         # if exists, compare hash to see if we need to update the remote file
         for local_file in all_local_files:
             if not any(x["name"] == local_file.name for x in all_remote_ais["ais"]):
-                print("need to create ai: " + local_file.name, end="")
+                print("\tCreate ai: " + local_file.name, end="")
                 parent_folder_id = 0
                 if local_file.folder != '':
                     parent = [x for x in all_remote_ais["folders"] if x["name"] == local_file.folder]
@@ -167,27 +172,45 @@ def push_all_ais(api, secondaries, root_folder):
                     if resultSave.ok:
                         all_remote_ais["ais"].append(new_ai)
                         print(" -> Done!")
+                    else:
+                        print(" -> K.O. ... " + resultSave.content)
+                    time.sleep(0.2) # we need to wait a little, to not be throttle
+                else:
+                    print(" -> K.O. ... " + result.content)
+                time.sleep(0.2) # we need to wait a little, to not be throttle
             else:
                 remote_file = [x for x in all_remote_ais["ais"] if x["name"] == local_file.name]
                 remote_code = api.get_ai(str(remote_file[0]["id"]))["ai"]["code"]
                 remote_hash = hashlib.sha512(remote_code.encode('utf-8')).hexdigest()
                 if remote_hash != local_file.hash:
-                    print("Need to update ai " + local_file.name, end="")
+                    print("\tUpdate ai " + local_file.name, end="")
                     resultSave = api.save_ai(remote_file[0]["id"],local_file.content)
                     if resultSave.ok:
                         print(" -> Done!")
+                    else:
+                        print(" -> K.O. ... " + resultSave.content)
                 time.sleep(0.2) # we need to wait a little, to not be throttle
                 
         
         for ai in  all_remote_ais["ais"]:
             if not any( x.name == ai["name"] for x in all_local_files):
-                print("need to delete ai: " + ai["name"], end="")
-                print(" -> TO DO...")
+                print("\tDelete ai: " + ai["name"], end="")
+                resultDelete = api.delete_ai(ai["id"])
+                if resultDelete.ok:
+                    print(" -> Done!")
+                else:
+                    print(" -> K.O. ... " + resultDelete.content)
+                time.sleep(0.2) # we need to wait a little, to not be throttle
 
         for folder in all_remote_ais["folders"]:
             if not any( x.name == folder["name"] for x in all_local_folders):
-                print("need to delete folder: " + folder["name"], end="")
-                print(" -> TO DO...")
+                print("\tDelete folder: " + folder["name"], end="")
+                resultDelete = api.delete_folder(folder["id"])
+                if resultDelete.ok:
+                    print(" -> Done!")
+                else:
+                    print(" -> K.O. ... " + resultDelete.content)
+                time.sleep(0.2) # we need to wait a little, to not be throttle
 
 
 def Fight(api,config):
