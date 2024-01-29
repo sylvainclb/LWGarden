@@ -73,6 +73,21 @@ def main():
         else:
             print("Unknown Option Selected!")
 
+def buildFolder(folders, all_folders, folder, currentPath):
+    if len(folders) == 0:
+        return
+    path = os.path.join(currentPath,folder["name"])
+
+    if(not(os.path.exists(path))) :
+        os.mkdir(path)
+    all_folders[folder["id"]] = path
+
+    folders = [f for f in folders if f["id"] != folder["id"]]
+
+    for f in folders:
+        if f["folder"] == folder["id"]:
+            buildFolder(folders, all_folders, f, path)
+
 def get_all_ais(api, root_folder : str):
     """Get all AIs from LeekWars, and save them in a directory location
     The folder hiearchie will be respected"""
@@ -85,16 +100,15 @@ def get_all_ais(api, root_folder : str):
 
     os.mkdir(root_folder)
 
-    all_folders = { 0 : "./" }
-    for folder in  all_ais["folders"]:
-        all_folders[folder["id"]] = folder["name"]
-        path = os.path.join(root_folder,folder["name"])
-        if(not(os.path.exists(path))) :
-            os.mkdir(path)
+    all_folders = { 0 : root_folder }
+    folders = all_ais["folders"][:]
+    for folder in all_ais["folders"]:
+        if folder["folder"] == 0:
+            buildFolder(folders, all_folders, folder, root_folder)
 
     for ai in  all_ais["ais"]:
         name = ai["name"]
-        folder = os.path.join(root_folder,all_folders[ai["folder"]])
+        folder = all_folders[ai["folder"]]
         code = api.get_ai(str(ai["id"]))["ai"]["code"]
         with open(os.path.join(folder,name+".leek"), "w") as outfile:
             outfile.write(code)
