@@ -5,6 +5,8 @@ login = "farmer/login-token" # /login, password
 register_tournament_farmer = "farmer/register-tournament"
 register_garden_farmer = "farmer/set-in-garden/in_garden"
 set_avatar = "farmer/set-avatar"
+get_farmer = "farmer/get" # farmer_id
+get_self =  "farmer/get-from-token" # no params
 
 # AI endpoints
 get_ais = "ai/get-farmer-ais"
@@ -14,6 +16,8 @@ save_ai = "ai/save"
 rename_ai = "ai/rename"
 new_folder_ai = "ai-folder/new-name"
 rename_folder_ai = "ai-folder/rename"
+delete_ai = "ai/delete"
+delete_folder = "ai-folder/delete"
 
 # Garden
 get_farmer_opponents = "garden/get-farmer-opponents"
@@ -41,7 +45,7 @@ get_functions = "function/get-all"
 get_doc_functions = "function/doc/locale"
 
 # Trophy
-get_farmer_trophies = "trophy/get-farmer-trophies/farmer_id/lang"
+get_farmer_trophies = "trophy/get-farmer-trophies" # farmer_id, lang
 
 # History
-get_farmer_history = "history/get-farmer-history/farmer_id"
+get_farmer_history = "history/get-farmer-history" # farmer_id
