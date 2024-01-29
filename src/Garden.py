@@ -82,6 +82,20 @@ def main():
         else:
             print("Unknown Option Selected!")
 
+def buildFolder(folders, all_folders, folder, currentPath):
+    if len(folders) == 0:
+        return
+    path = os.path.join(currentPath,folder["name"])
+
+    if(not(os.path.exists(path))) :
+        os.mkdir(path)
+    all_folders[folder["id"]] = path
+
+    folders = [f for f in folders if f["id"] != folder["id"]]
+
+    for f in folders:
+        if f["folder"] == folder["id"]:
+            buildFolder(folders, all_folders, f, path)
 
 def get_all_ais(api, root_folder : str):
     """Get all AIs from LeekWars, and save them in a directory location
@@ -95,17 +109,16 @@ def get_all_ais(api, root_folder : str):
 
     os.mkdir(root_folder)
 
-    all_folders = { 0 : "./" }
+    all_folders = { 0 : root_folder }
+    folders = all_ais["folders"][:]
     for folder in all_ais["folders"]:
-        all_folders[folder["id"]] =  os.path.join(all_folders[folder["folder"]],folder["name"])
-        path = os.path.join(root_folder, all_folders[folder["id"]])
-        if(not(os.path.exists(path))) :
-            os.mkdir(path)
+        if folder["folder"] == 0:
+            buildFolder(folders, all_folders, folder, root_folder)
 
     for ai in  all_ais["ais"]:
         name = ai["name"]
-        folder = os.path.join(root_folder,all_folders[ai["folder"]])
-        code = api.get_ai(ai["id"])["ai"]["code"]
+        folder = all_folders[ai["folder"]]
+        code = api.get_ai(str(ai["id"]))["ai"]["code"]
         with open(os.path.join(folder,name+".leek"), "w") as outfile:
             outfile.write(code)
         time.sleep(0.2) # we need to wait a little, to not be throttle
@@ -142,12 +155,12 @@ def push_all_ais(api, secondaries, root_folder):
                     jsonResult = result.json()
                     new_folder = {
                     "id": jsonResult["id"],
-                    "name": local_folder.name, 
+                    "name": local_folder.name,
                     "folder": parent_folder_id
                     }
                     all_remote_ais["folders"].append(new_folder)
 
-        
+
 
         # Loop on local ais and create in remote if not exists
         # if exists, compare hash to see if we need to update the remote file
@@ -163,7 +176,7 @@ def push_all_ais(api, secondaries, root_folder):
                     jsonResult = result.json()
                     new_ai = {
                         "id":jsonResult["ai"]["id"],
-                        "name": local_file.name, 
+                        "name": local_file.name,
                         "folder": parent_folder_id,
                         "code": local_file.content,
                         "level": jsonResult["ai"]["level"]
@@ -190,8 +203,8 @@ def push_all_ais(api, secondaries, root_folder):
                     else:
                         print(" -> K.O. ... " + resultSave.content)
                 time.sleep(0.2) # we need to wait a little, to not be throttle
-                
-        
+
+
         for ai in  all_remote_ais["ais"]:
             if not any( x.name == ai["name"] for x in all_local_files):
                 print("\tDelete ai: " + ai["name"], end="")
@@ -257,8 +270,8 @@ def get_local_ais(root_folder, local_ais = [], ext = "*.leek"):
             with open(os.path.join(dirpath,filename), 'r') as file:
                 filecontent = file.read()
                 local_ais.append(type('',(object,),{
-                    "name": filename.replace('.leek',''), 
-                    "content" : filecontent, 
+                    "name": filename.replace('.leek',''),
+                    "content" : filecontent,
                     "hash": hashlib.sha512(filecontent.encode('utf-8')).hexdigest(),
                     "folder": os.path.basename(dirpath.replace(root_folder,'')),
                     "type": "file"
@@ -266,7 +279,7 @@ def get_local_ais(root_folder, local_ais = [], ext = "*.leek"):
         for dirname in dirnames:
             local_ais.append(type('',(object,),{
                     "name": dirname ,
-                    "content" : "", 
+                    "content" : "",
                     "hash": "",
                     "folder": os.path.basename(dirpath.replace(root_folder,'')),
                     "type": "folder"
