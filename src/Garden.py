@@ -80,7 +80,7 @@ def main():
         elif selection == '6':
             break
         else:
-            print("Unknown Option Selected!")
+            print(" Unknown Option Selected!")
 
 def buildFolder(folders, all_folders, folder, currentPath):
     if len(folders) == 0:
