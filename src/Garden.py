@@ -51,11 +51,12 @@ def main():
 
     menu = {}
     menu['1']="Get your AIs."
-    menu['2']="Launch fight"
-    menu['3']="Get Register"
-    menu['4']="Get Farmer's Throphies"
-    menu['5']="Push your AIs on secondary(ies) account(s)."
-    menu['6']="Exit"
+    menu['2']="Push your AIs on secondary(ies) account(s)."
+    menu['3']="Sync IAs from primary account to your secondary(ies) account(s)."
+    menu['4']="Launch fight"
+    menu['5']="Get Register"
+    menu['6']="Get Farmer's Throphies"
+    menu['0']="Exit"
     while True:
         options=sorted(menu.keys())
 
@@ -68,16 +69,21 @@ def main():
         if selection =='1':
             get_all_ais(api, config["AIs_folder"])
         elif selection == '2':
-            print("delete")
-        elif selection == '3':
-            get_register(api,config)
-        elif selection == '4':
-            get_farmer_trophies(api, config["AIs_folder"])
-        elif selection == '5':
             push_all_ais(api, secondaries, config["AIs_folder"])
             # reconnect to the main
             api.connect(principal["username"], principal["password"])
+        elif selection == '3':
+            get_all_ais(api, config["AIs_folder"])
+            push_all_ais(api, secondaries, config["AIs_folder"])
+            # reconnect to the main
+            api.connect(principal["username"], principal["password"])
+        elif selection == '4':
+            print('TO TO')
+        elif selection == '5':
+            get_register(api,config)
         elif selection == '6':
+            get_farmer_trophies(api, config["AIs_folder"])
+        elif selection == '0':
             break
         else:
             print(" Unknown Option Selected!")
