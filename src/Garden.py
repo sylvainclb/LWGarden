@@ -56,7 +56,8 @@ def main():
     menu['4']="Launch fight"
     menu['5']="Get Register"
     menu['6']="Get Farmer's Throphies"
-    menu['0']="Exit"
+    menu['7']="Buy Fights"
+    menu['9']="Exit"
     while True:
         options=sorted(menu.keys())
 
@@ -83,7 +84,9 @@ def main():
             get_register(api,config)
         elif selection == '6':
             get_farmer_trophies(api, config["AIs_folder"])
-        elif selection == '0':
+        elif selection == '7':
+            buy_fights(api, config["accounts"])
+        elif selection == '9':
             break
         else:
             print(" Unknown Option Selected!")
@@ -291,6 +294,21 @@ def get_local_ais(root_folder, local_ais = [], ext = "*.leek"):
                     "type": "folder"
                 })())
     return local_ais
+
+def buy_fights(api, accounts):
+    """Buy 50 fights with habs for all accounts"""
+    connected_username = api.get_connected_username()
+    for account in accounts:
+        if(connected_username != account["username"]):
+            api.connect(account["username"], account["password"])
+        print("\nBuy 50 fights for the account {farmer_name}\n".format(farmer_name=account["username"]))
+        buy_response = api.buy_fights()
+        if "fights" in buy_response:
+            print("Buying 50 fights: OK. ")
+        else:
+            print(buy_response['error'] + " when trying to buy 50 fights")
+
+
 
 # Here goes all the magic
 main()

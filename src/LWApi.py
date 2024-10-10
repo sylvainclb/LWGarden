@@ -8,6 +8,7 @@ class LWApi:
         """Constructor of LWApi. Init the session."""
         self.__root_url = Uri.root
         self.__token = ""
+        self.__username = ""
         self.__session = requests.Session()
 
     def connect(self,login,password):
@@ -16,10 +17,14 @@ class LWApi:
         try:
             login_response = self.__session.post(self.__root_url + connection_string, data={ "login": login, "password": password}).json()
             self.__token = login_response["token"]
+            self.__username = login
         except:
             return False
         else:
             return True
+
+    def get_connected_username(self):
+        return self.__username;
 
     def get_farmer_self(self):
         """Get you farmer object, based on the connected LeekWars account."""
@@ -78,6 +83,10 @@ class LWApi:
     def get_doc_functions(self, langue):
         """Get the full documention of built-in functions. Only 'fr' the currently supported as locale"""
         return self.__session.get(self.__root_url + Uri.get_doc_functions.replace("locale",langue), data={ "token": self.__token}).json()
+    
+    def buy_fights(self):
+        """Buy 50 fights with habs"""
+        return self.__session.post(self.__root_url + Uri.buy_fights, data={'item_id':'50fights', 'quantity':1}).json()
 
     # Section Registre
     def get_registers(self, leek_id):
