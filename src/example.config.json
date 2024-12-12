@@ -9,6 +9,11 @@
                 "Solo":"5",
                 "Team":"5"
             },
+            "Tournaments":{
+                "Farmer": true,
+                "Solo": true,
+                "BattleRoyal": true
+            },
             "primary":"true"
         },
         {
@@ -18,6 +23,11 @@
                 "Farmer":"30",
                 "Solo":"5",
                 "Team":"5"
+            },
+            "Tournaments":{
+                "Farmer": true,
+                "Solo": true,
+                "BattleRoyal": true
             },
             "primary":"false"
         }

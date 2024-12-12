@@ -42,8 +42,9 @@ def main():
     accounts = config["accounts"]
     principal= next(p for p in accounts if p["primary"] == 'true')
     secondaries = list(p for p in accounts if p["primary"] == 'false')
-    if api.connect(principal["username"], principal["password"]):
-        farmer = api.get_farmer_self()["farmer"]
+    response_connect = api.connect(principal["username"], principal["password"])
+    if response_connect:
+        farmer = api.get_farmer()
         print("\nYou are connected as {farmer_name}".format(farmer_name=farmer["login"]))
     else:
         print("\nCannot connect to LW account with ID {user_name}\n".format(user_name=principal["username"]))
@@ -57,6 +58,7 @@ def main():
     menu['5']="Get Register"
     menu['6']="Get Farmer's Throphies"
     menu['7']="Buy Fights"
+    menu['8']="Register to tournament"
     menu['9']="Exit"
     while True:
         options=sorted(menu.keys())
@@ -86,6 +88,8 @@ def main():
             get_farmer_trophies(api, config["AIs_folder"])
         elif selection == '7':
             buy_fights(api, config["accounts"])
+        elif selection == '8':
+            register_tournaments(api, config["accounts"])
         elif selection == '9':
             break
         else:
@@ -146,8 +150,8 @@ def push_all_ais(api, secondaries, root_folder):
 
     # Per account, get all remote ias, to do the comparison
     for secondary in secondaries:
-        api.connect(secondary["username"], secondary["password"])
-        farmer2 = api.get_farmer_self()["farmer"]
+        api.connect(secondary["username"], secondary["password"])["farmer"]
+        farmer2 = api.get_farmer()
         print("\nPush to the account {farmer_name}\n".format(farmer_name=farmer2["login"]))
         all_remote_ais = api.get_ais()
 
@@ -241,7 +245,7 @@ def Fight(api,config):
 
 def get_register(api,config):
     print("\nRegister()\n")
-    registers = api.get_registers("82210")
+    registers = api.get_registers(82210)
     menu ={}
     i=0
     for register in registers["registers"]:
@@ -301,13 +305,36 @@ def buy_fights(api, accounts):
     for account in accounts:
         if(connected_username != account["username"]):
             api.connect(account["username"], account["password"])
-        print("\nBuy 50 fights for the account {farmer_name}\n".format(farmer_name=account["username"]))
+        farmer = api.get_farmer()
+        print("\nBuy 50 fights for the account {farmer_name}\n".format(farmer_name=farmer["login"]))
         buy_response = api.buy_fights()
         if "fights" in buy_response:
             print("Buying 50 fights: OK. ")
         else:
             print(buy_response['error'] + " when trying to buy 50 fights")
 
+def register_tournaments(api, accounts):
+    """Register for tournaments, for all accounts if required"""
+    connected_username = api.get_connected_username()
+    for account in accounts:
+        if (any(account["Tournaments"][tournament] == True for tournament in account["Tournaments"])):
+            if (connected_username != account["username"]):
+                api.connect(account["username"], account["password"])
+            farmer = api.get_farmer()
+            print("\nRegister to tournaments for the account {farmer_name}\n".format(farmer_name=farmer["login"]))
+            if(account["Tournaments"]["Farmer"]):
+                """register for farmer"""
+                register_response = api.register_tournament_farmer()
+                if (register_response and len(register_response) > 0):
+                    print(register_response["error"])
+                else:
+                    print("register OK")
+
+            if(account["Tournaments"]["Solo"]):
+                """register all solo"""
+
+            if(account["Tournaments"]["BattleRoyal"]):
+                """register all solo"""
 
 
 # Here goes all the magic
