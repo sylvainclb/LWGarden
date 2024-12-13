@@ -1,6 +1,7 @@
 import time, os, json, hashlib
 from LWApi import LWApi
 from shutil import rmtree
+import json
 
 
 def main():
@@ -45,7 +46,7 @@ def main():
     response_connect = api.connect(principal["username"], principal["password"])
     if response_connect:
         farmer = api.get_farmer()
-        print("\nYou are connected as {farmer_name}".format(farmer_name=farmer["login"]))
+        print("\nYou are connected as {farmer_name}".format(farmer_name=farmer["name"]))
     else:
         print("\nCannot connect to LW account with ID {user_name}\n".format(user_name=principal["username"]))
         exit()
@@ -306,7 +307,7 @@ def buy_fights(api, accounts):
         if(connected_username != account["username"]):
             api.connect(account["username"], account["password"])
         farmer = api.get_farmer()
-        print("\nBuy 50 fights for the account {farmer_name}\n".format(farmer_name=farmer["login"]))
+        print("\nBuy 50 fights for the account {farmer_name}\n".format(farmer_name=farmer["name"]))
         buy_response = api.buy_fights()
         if "fights" in buy_response:
             print("Buying 50 fights: OK. ")
@@ -321,21 +322,41 @@ def register_tournaments(api, accounts):
             if (connected_username != account["username"]):
                 api.connect(account["username"], account["password"])
             farmer = api.get_farmer()
-            print("\nRegister to tournaments for the account {farmer_name}\n".format(farmer_name=farmer["login"]))
+            print("\nRegister to tournaments for the account {farmer_name} : ".format(farmer_name=farmer["name"]))
             if(account["Tournaments"]["Farmer"]):
                 """register for farmer"""
+                print("\t > Farmer:", end=" ")
                 register_response = api.register_tournament_farmer()
                 if (register_response and len(register_response) > 0):
                     print(register_response["error"])
                 else:
                     print("register OK")
 
-            if(account["Tournaments"]["Solo"]):
-                """register all solo"""
+            for leek_id in farmer["leeks"]:
+                leek = api.get_leek(int(leek_id))
+                if(account["Tournaments"]["Solo"]):
+                    """register all solo"""
+                    print("\t > Solo {leek_name}:".format(leek_name=leek["name"]), end=" ")
+                    if leek["tournament"]["registered"]:
+                        print("register OK")
+                    else:
+                        register_response = api.register_tournament_leek(int(leek_id))
+                        if (register_response and len(register_response) > 0):
+                            print(register_response["error"])
+                        else:
+                            print("register OK")
 
-            if(account["Tournaments"]["BattleRoyal"]):
-                """register all solo"""
-
+                if(account["Tournaments"]["BattleRoyal"]):
+                    """register all auto BR"""
+                    print("\t > BR {leek_name}:".format(leek_name=leek["name"]), end=" ")
+                    if leek["auto_br"]:
+                        print("register OK")
+                    else:
+                        register_response = api.register_tournament_battle_royal(int(leek_id))
+                        if (register_response and len(register_response) > 0):
+                            print(register_response["error"])
+                        else:
+                            print("register OK")
 
 # Here goes all the magic
 main()

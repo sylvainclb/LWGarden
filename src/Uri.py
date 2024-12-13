@@ -32,11 +32,13 @@ get_fullmoon = "/fight/fullmoon"
 
 # Leek
 register_tournament_leek = "/leek/register-tournament/leek_id"
+register_auto_br_leek = "/leek/register-auto-br/leek_id"
 register_garden_leek = "/leek/set-in-garden/leek_id/in_garden"
 register_battle_royal_leek = "/leek/register-auto-br/leek_id"
 get_registers = "/leek/get-registers/leek_id"
 set_register = "/leek/set-register/leek_id/key/value"
 delete_register = "/leek/delete-register/leek_id/key"
+get_leek = "/leek/get/leek_id"
 
 # Various
 get_scheme = "/scheme/get-all"

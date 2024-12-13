@@ -17,7 +17,8 @@ class LWApi:
         """Connect to LeekWars Api and retrieve the auth token."""
         connection_string = Uri.login
         try:
-            login_response = self.__session.post(self.__root_url + connection_string, data={ "login": login, "password": password}).json()
+            response = self.__session.post(self.__root_url + connection_string, data={ "login": login, "password": password})
+            login_response = response.json()
             self.__token = login_response["token"]
             self.__username = login
             self.__farmer = login_response["farmer"]
@@ -32,6 +33,10 @@ class LWApi:
 
     def get_farmer(self):
         return self.__farmer;
+
+    def get_leek(self,leek_id: int):
+        """Get a leek object, based on the given {leek_id}."""
+        return self.__session.get(self.__root_url + Uri.get_leek.replace("leek_id", str(leek_id)), data={ "token": self.__token}).json()
 
     def get_farmer_self(self):
         """Get you farmer object, based on the connected LeekWars account."""
@@ -96,11 +101,11 @@ class LWApi:
         return self.__session.post(self.__root_url + Uri.buy_fights, data={'item_id':'50fights', 'quantity':1}).json()
 
     # Section Registre
-    def get_registers(self, leek_id):
+    def get_registers(self, leek_id: int):
         """Get the registers of the given {leek_id}"""
         return self.__session.get(self.__root_url + Uri.get_registers.replace("leek_id", str(leek_id)), data={ "token": self.__token }).json()
 
-    def delete_register(self, leek_id, register_key):
+    def delete_register(self, leek_id: int, register_key):
         """Delete the register {key} of the given {leek_id}"""
         return self.__session.post(self.__root_url + Uri.delete_register, data={ "token": self.__token, "leek_id": leek_id, "key": register_key }).json()
 
@@ -108,7 +113,7 @@ class LWApi:
         """Set the register {key} with {value} of the given {leek_id}"""
         return self.__session.post(self.__root_url + Uri.set_register.replace("leek_id", leek_id).replace("key", register_key).replace("value",register_value), data={ "token": self.__token}).json()
 
-    def get_farmer_trophies(self, farmer_id):
+    def get_farmer_trophies(self, farmer_id: int):
         """Get trophies list of the given {farmer}"""
         return self.__session.get(self.__root_url + Uri.get_farmer_trophies.replace("farmer_id", farmer_id,).replace("lang","fr"), data={ "token": self.__token, "farmer_id": farmer_id, "lang":"fr"}).json()
     
@@ -117,3 +122,11 @@ class LWApi:
     def register_tournament_farmer(self):
         """Register the connected farmer to farmer tournaments"""
         return self.__session.post(self.__root_url + Uri.register_tournament_farmer, data={ "token": self.__token}).json()
+    
+    def register_tournament_leek(self, leek_id: int):
+        """Register the given {leek_id} to solo tournaments"""
+        return self.__session.post(self.__root_url + Uri.register_tournament_leek, data={ "token": self.__token, "leek_id": leek_id}).json()
+    
+    def register_tournament_battle_royal(self, leek_id: int):
+        """Register the given {leek_id} to solo tournaments"""
+        return self.__session.post(self.__root_url + Uri.register_auto_br_leek, data={ "token": self.__token, "leek_id": leek_id}).json()
