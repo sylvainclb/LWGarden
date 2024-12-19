@@ -1,35 +1,38 @@
 {
-    "AIs_folder":"../LeekWars-AIs/src/",
-    "accounts":[
+    "ais_folder": "../LeekWars-AIs/src/",
+    "auto_register": true,
+    "auto_buy": true,
+    "auto_fight": true,
+    "accounts": [
         {
-            "username":"email@domain.com",
-            "password":"pw",
-            "Figths":{
-                "Farmer":"30",
-                "Solo":"5",
-                "Team":"5"
+            "username": "email@domain.com",
+            "password": "pw",
+            "figths": {
+                "farmer": 30,
+                "solo": 5,
+                "team": 5
             },
-            "Tournaments":{
-                "Farmer": true,
-                "Solo": true,
-                "BattleRoyal": true
+            "tournaments": {
+                "farmer": true,
+                "solo": true,
+                "battle_royal": true
             },
-            "primary":"true"
+            "primary": "true"
         },
         {
-            "username":"email@domain.com",
-            "password":"pwd",
-            "Figths":{
-                "Farmer":"30",
-                "Solo":"5",
-                "Team":"5"
+            "username": "email@domain.com",
+            "password": "pwd",
+            "figths": {
+                "farmer": 30,
+                "solo": 5,
+                "team": 5
             },
-            "Tournaments":{
-                "Farmer": true,
-                "Solo": true,
-                "BattleRoyal": true
+            "tournaments": {
+                "farmer": true,
+                "solo": true,
+                "battle_royal": true
             },
-            "primary":"false"
+            "primary": "false"
         }
     ]
 }

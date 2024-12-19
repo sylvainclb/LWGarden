@@ -41,15 +41,15 @@ def main():
         config = json.load(configfile)
     api = LWApi()
     accounts = config["accounts"]
-    principal= next(p for p in accounts if p["primary"] == 'true')
-    secondaries = list(p for p in accounts if p["primary"] == 'false')
-    response_connect = api.connect(principal["username"], principal["password"])
-    if response_connect:
-        farmer = api.get_farmer()
-        print("\nYou are connected as {farmer_name}".format(farmer_name=farmer["name"]))
-    else:
-        print("\nCannot connect to LW account with ID {user_name}\n".format(user_name=principal["username"]))
-        exit()
+    principal= next(p for p in accounts if p["primary"] == True)
+    secondaries = list(p for p in accounts if p["primary"] == False)
+
+    if config["auto_buy"] == True:
+        buy_fights(api, accounts)
+    if config["auto_register"] == True:
+        register_tournaments(api, accounts)
+    if config["auto_fight"] == True:
+        fight(api, accounts)
 
     menu = {}
     menu['1']="Get your AIs."
@@ -71,22 +71,18 @@ def main():
 
         selection=input("Please Select:")
         if selection =='1':
-            get_all_ais(api, config["AIs_folder"])
+            get_all_ais(api, principal, config["ais_folder"])
         elif selection == '2':
-            push_all_ais(api, secondaries, config["AIs_folder"])
-            # reconnect to the main
-            api.connect(principal["username"], principal["password"])
+            push_all_ais(api, secondaries, config["ais_folder"])
         elif selection == '3':
-            get_all_ais(api, config["AIs_folder"])
-            push_all_ais(api, secondaries, config["AIs_folder"])
-            # reconnect to the main
-            api.connect(principal["username"], principal["password"])
+            get_all_ais(api, principal, config["ais_folder"])
+            push_all_ais(api, secondaries, config["ais_folder"])
         elif selection == '4':
             print('TO TO')
         elif selection == '5':
-            get_register(api,config)
+            get_register(api, principal)
         elif selection == '6':
-            get_farmer_trophies(api, config["AIs_folder"])
+            get_farmer_trophies(api, config["ais_folder"])
         elif selection == '7':
             buy_fights(api, config["accounts"])
         elif selection == '8':
@@ -111,9 +107,16 @@ def buildFolder(folders, all_folders, folder, currentPath):
         if f["folder"] == folder["id"]:
             buildFolder(folders, all_folders, f, path)
 
-def get_all_ais(api, root_folder : str):
+def get_all_ais(api, principal, root_folder : str):
     """Get all AIs from LeekWars, and save them in a directory location
     The folder hiearchie will be respected"""
+    response_connect = api.connect(principal["username"], principal["password"])
+    if response_connect:
+        farmer = api.get_farmer()
+        print("\nYou are connected as {farmer_name}".format(farmer_name=farmer["name"]))
+    else:
+        print("\nCannot connect to LW account with ID {user_name}\n".format(user_name=principal["username"]))
+        exit(3)
     print("\nget_all_ais()\n")
     all_ais = api.get_ais()
 
@@ -151,7 +154,7 @@ def push_all_ais(api, secondaries, root_folder):
 
     # Per account, get all remote ias, to do the comparison
     for secondary in secondaries:
-        api.connect(secondary["username"], secondary["password"])["farmer"]
+        api.connect(secondary["username"], secondary["password"])
         farmer2 = api.get_farmer()
         print("\nPush to the account {farmer_name}\n".format(farmer_name=farmer2["login"]))
         all_remote_ais = api.get_ais()
@@ -240,8 +243,8 @@ def push_all_ais(api, secondaries, root_folder):
                 time.sleep(0.2) # we need to wait a little, to not be throttle
 
 
-def Fight(api,config):
-    print("\nFight()\n")
+def fight(api, accounts):
+    print("\nFight -> TO DO\n")
 
 
 def get_register(api,config):
@@ -307,23 +310,23 @@ def buy_fights(api, accounts):
         if(connected_username != account["username"]):
             api.connect(account["username"], account["password"])
         farmer = api.get_farmer()
-        print("\nBuy 50 fights for the account {farmer_name}\n".format(farmer_name=farmer["name"]))
+        print("\nBuy 50 fights for the account {farmer_name}:".format(farmer_name=farmer["name"]))
         buy_response = api.buy_fights()
         if "fights" in buy_response:
-            print("Buying 50 fights: OK. ")
+            print("\t > OK.")
         else:
-            print(buy_response['error'] + " when trying to buy 50 fights")
+            print("\t > " + buy_response['error'] + " when trying to buy 50 fights")
 
 def register_tournaments(api, accounts):
     """Register for tournaments, for all accounts if required"""
     connected_username = api.get_connected_username()
     for account in accounts:
-        if (any(account["Tournaments"][tournament] == True for tournament in account["Tournaments"])):
+        if (any(account["tournaments"][tournament] == True for tournament in account["tournaments"])):
             if (connected_username != account["username"]):
                 api.connect(account["username"], account["password"])
             farmer = api.get_farmer()
-            print("\nRegister to tournaments for the account {farmer_name} : ".format(farmer_name=farmer["name"]))
-            if(account["Tournaments"]["Farmer"]):
+            print("\nRegister to tournaments for the account {farmer_name}:".format(farmer_name=farmer["name"]))
+            if(account["tournaments"]["farmer"]):
                 """register for farmer"""
                 print("\t > Farmer:", end=" ")
                 register_response = api.register_tournament_farmer()
@@ -334,7 +337,7 @@ def register_tournaments(api, accounts):
 
             for leek_id in farmer["leeks"]:
                 leek = api.get_leek(int(leek_id))
-                if(account["Tournaments"]["Solo"]):
+                if(account["tournaments"]["solo"]):
                     """register all solo"""
                     print("\t > Solo {leek_name}:".format(leek_name=leek["name"]), end=" ")
                     if leek["tournament"]["registered"]:
@@ -346,7 +349,7 @@ def register_tournaments(api, accounts):
                         else:
                             print("register OK")
 
-                if(account["Tournaments"]["BattleRoyal"]):
+                if(account["tournaments"]["battle_royal"]):
                     """register all auto BR"""
                     print("\t > BR {leek_name}:".format(leek_name=leek["name"]), end=" ")
                     if leek["auto_br"]:
