@@ -23,8 +23,8 @@
             "username": "email@domain.com",
             "password": "pwd",
             "figths": {
-                "farmer": 30,
-                "solo": 5,
+                "farmer": 10,
+                "solo": 10,
                 "team": 5
             },
             "tournaments": {
