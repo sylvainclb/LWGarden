@@ -36,7 +36,11 @@ class LWApi:
 
     def get_leek(self,leek_id: int):
         """Get a leek object, based on the given {leek_id}."""
-        return self.__session.get(self.__root_url + Uri.get_leek.replace("leek_id", str(leek_id)), data={ "token": self.__token}).json()
+        return self.__session.get(self.__root_url + Uri.get_leek.replace("leek_id", str(leek_id))).json()
+
+    def get_private_leek(self,leek_id: int):
+        """Get a full leek object, based on the given {leek_id}. Only for our own leeks"""
+        return self.__session.get(self.__root_url + Uri.get_private_leek.replace("leek_id", str(leek_id)), data={ "token": self.__token}).json()
 
     def get_farmer_self(self):
         """Get you farmer object, based on the connected LeekWars account."""
@@ -130,3 +134,15 @@ class LWApi:
     def register_tournament_battle_royal(self, leek_id: int):
         """Register the given {leek_id} to solo tournaments"""
         return self.__session.post(self.__root_url + Uri.register_auto_br_leek, data={ "token": self.__token, "leek_id": leek_id}).json()
+    
+    def get_team(self, team_id: int):
+        """Get team"""
+        return self.__session.get(self.__root_url + Uri.get_team.replace("team_id", str(team_id)), data={ "token": self.__token, "team_id": team_id}).json()
+    
+    def get_team_private(self, team_id: int):
+        """Get team private"""
+        return self.__session.get(self.__root_url + Uri.get_team_private.replace("team_id", str(team_id)), data={ "token": self.__token, "team_id": team_id}).json()
+
+    def get_fight(self, fight_id: int):
+        """Get fight"""
+        return self.__session.get(self.__root_url + Uri.get_fight.replace("fight_id", str(fight_id)), data={ "token": self.__token, "fight_id": fight_id}).json()

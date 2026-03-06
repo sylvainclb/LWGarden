@@ -5,7 +5,7 @@ import json
 
 
 def main():
-    """Main function, it constites of a Menu where you can select
+    """Main function, it consistes of a Menu where you can select
     an action to perform:
     """
     print("▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁")
@@ -37,7 +37,7 @@ def main():
     print("\nWelcome to the Leek Garden, a tool to empower your leeks on LeekWars!")
 
     print("\nTry to login on the LeekWars Api, please ensure that a config.json is present, with your username and password")
-    with open("./src/config.json", "r") as configfile:
+    with open("./src/lw.config.json", "r") as configfile:
         config = json.load(configfile)
     api = LWApi()
     accounts = config["accounts"]
@@ -60,9 +60,11 @@ def main():
     menu['6']="Get Farmer's Throphies"
     menu['7']="Buy Fights"
     menu['8']="Register to tournament"
-    menu['9']="Exit"
+    menu['9']="Get team"
+    menu['10']="Get fight"
+    menu['99']="Exit"
     while True:
-        options=sorted(menu.keys())
+        options=sorted(menu.keys(), key=int)
 
         print("\n")
 
@@ -88,9 +90,14 @@ def main():
         elif selection == '8':
             register_tournaments(api, config["accounts"])
         elif selection == '9':
+            get_team(api, principal)
+        elif selection == '10':
+            get_fight(api, principal)
+        elif selection == '99':
             break
+       
         else:
-            print(" Unknown Option Selected!")
+            print(" Unknown Option Sel ected!")
 
 def buildFolder(folders, all_folders, folder, currentPath):
     if len(folders) == 0:
@@ -243,8 +250,15 @@ def push_all_ais(api, secondaries, root_folder):
                 time.sleep(0.2) # we need to wait a little, to not be throttle
 
 
-def fight(api, accounts):
-    print("\nFight -> TO DO\n")
+def get_fight(api, principal):
+    print("\nFight\n")
+    connected_username = api.get_connected_username()
+    if(connected_username != principal["username"]):
+        api.connect(principal["username"], principal["password"])
+    fight_id=input("Please enter a fight id: ")
+    fight = api.get_fight(int(fight_id))
+    with open(os.path.join("./data/", fight_id +".json"), "w") as outfile:
+        outfile.write(json.dumps(fight))
 
 
 def get_register(api,config):
@@ -304,9 +318,9 @@ def get_local_ais(root_folder, local_ais = [], ext = "*.leek"):
     return local_ais
 
 def buy_fights(api, accounts):
-    """Buy 50 fights with habs for all accounts"""
-    connected_username = api.get_connected_username()
+    """Buy 50 fights with habs for all accounts"""   
     for account in accounts:
+        connected_username = api.get_connected_username()
         if(connected_username != account["username"]):
             api.connect(account["username"], account["password"])
         farmer = api.get_farmer()
@@ -318,9 +332,9 @@ def buy_fights(api, accounts):
             print("\t > " + buy_response['error'] + " when trying to buy 50 fights")
 
 def register_tournaments(api, accounts):
-    """Register for tournaments, for all accounts if required"""
-    connected_username = api.get_connected_username()
+    """Register for tournaments, for all accounts if required"""   
     for account in accounts:
+        connected_username = api.get_connected_username()
         if (any(account["tournaments"][tournament] == True for tournament in account["tournaments"])):
             if (connected_username != account["username"]):
                 api.connect(account["username"], account["password"])
@@ -336,7 +350,7 @@ def register_tournaments(api, accounts):
                     print("register OK")
 
             for leek_id in farmer["leeks"]:
-                leek = api.get_leek(int(leek_id))
+                leek = api.get_private_leek(int(leek_id))
                 if(account["tournaments"]["solo"]):
                     """register all solo"""
                     print("\t > Solo {leek_name}:".format(leek_name=leek["name"]), end=" ")
@@ -361,5 +375,21 @@ def register_tournaments(api, accounts):
                         else:
                             print("register OK")
 
+def get_team(api, principal):
+    """get team"""
+    print("\nget_team()\n")
+    response_connect = api.connect(principal["username"], principal["password"])
+    if response_connect:
+        farmer = api.get_farmer()
+        team = api.get_team_private(int(farmer['team']['id']))
+        with open(os.path.join("./data/","composition.json"), "w") as outfile:
+            outfile.write(json.dumps(team['compositions']))
+    else:
+        print("\nCannot connect to LW account with ID {user_name}\n".format(user_name=principal["username"]))
+        exit(3)
+    
+
+
 # Here goes all the magic
 main()
+

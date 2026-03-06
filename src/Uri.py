@@ -8,6 +8,10 @@ set_avatar = "/farmer/set-avatar"
 get_farmer = "/farmer/get" # farmer_id
 get_self = "/farmer/get-from-token" # no params
 
+# Team endpoints
+get_team = "/team/get/team_id" # team_id
+get_team_private = "/team/get-private/team_id" # team_id
+
 # AI endpoints
 get_ais = "/ai/get-farmer-ais"
 get_ai = "/ai/get"
@@ -29,6 +33,7 @@ start_team_fight = "/garden/start-team-fight/composition_id/target_id"
 
 # Fight
 get_fullmoon = "/fight/fullmoon"
+get_fight = "/fight/get/fight_id"
 
 # Leek
 register_tournament_leek = "/leek/register-tournament/leek_id"
@@ -39,6 +44,7 @@ get_registers = "/leek/get-registers/leek_id"
 set_register = "/leek/set-register/leek_id/key/value"
 delete_register = "/leek/delete-register/leek_id/key"
 get_leek = "/leek/get/leek_id"
+get_private_leek = "/leek/get-private/leek_id"
 
 # Various
 get_scheme = "/scheme/get-all"
